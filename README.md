@@ -14,7 +14,9 @@ Sau khi lệnh phía trên chạy xong, để run web lần lượt chạy 2 com
 
 ```bash
 npm run build
+```
 
+```bash
 npm run start
 ```
 
