@@ -142,8 +142,7 @@ export const categoryOptions = [
 ]
 
 export const tableColumns = [
-    { key: "rank", label: "#", center: true },
-    { key: "team", label: "Team/Creator" },
+    { key: "rank", label: "rank", center: true },
     { key: "model", label: "Model Name" },
     { key: "provider", label: "Provider" },
     { key: "benchmarkScore", label: "Benchmark Score", center: true },
