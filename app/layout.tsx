@@ -1,5 +1,9 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
     title: "Leaderboard | Viettel Codev Hub",
@@ -12,7 +16,7 @@ export default function RootLayout({
     children: React.ReactNode
 }>) {
     return (
-        <html lang="en" className="light">
+        <html lang="en" className={cn("light", "font-sans", geist.variable)}>
             <head>
                 <link
                     href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap"
