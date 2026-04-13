@@ -1,8 +1,8 @@
-import TopBar from "./components/top-bar"
-import HeroSection from "./components/hero-section"
-import LeaderboardTable from "./components/leaderboard-table"
-import Pagination from "./components/pagination"
-import { leaderboardData } from "./data/leaderboard-data"
+import TopBar from "@/components/top-bar"
+import HeroSection from "@/components/hero-section"
+import LeaderboardTable from "@/components/leaderboard-table"
+import Pagination from "@/components/pagination"
+import { leaderboardData } from "../data/leaderboard-data"
 
 export default async function LeaderboardPage({
     searchParams,

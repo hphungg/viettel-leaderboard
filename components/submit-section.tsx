@@ -1,4 +1,9 @@
 import { categoryOptions } from "../data/leaderboard-data"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { CloudArrowUp } from "@phosphor-icons/react/dist/ssr"
 
 export default function SubmitSection() {
     return (
@@ -20,14 +25,16 @@ export default function SubmitSection() {
                             >
                                 Choose Category
                             </label>
-                            <select
-                                className="bg-surface-container-lowest border-surface-container-high focus:ring-primary focus:border-primary rounded-lg px-4 py-2.5 text-sm transition-all"
-                                id="category"
-                            >
-                                {categoryOptions.map((option) => (
-                                    <option key={option}>{option}</option>
-                                ))}
-                            </select>
+                            <Select>
+                                <SelectTrigger id="category" className="bg-surface-container-lowest border-surface-container-high h-[42px] focus-visible:ring-primary focus-visible:border-primary rounded-lg px-4 py-2.5 text-sm transition-all shadow-none">
+                                    <SelectValue placeholder="Select a category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {categoryOptions.map((option) => (
+                                        <SelectItem key={option} value={option}>{option}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div className="flex flex-col gap-2">
                             <label
@@ -36,8 +43,8 @@ export default function SubmitSection() {
                             >
                                 Model Name
                             </label>
-                            <input
-                                className="bg-surface-container-lowest border-surface-container-high focus:ring-primary focus:border-primary rounded-lg px-4 py-2.5 text-sm transition-all"
+                            <Input
+                                className="bg-surface-container-lowest border-surface-container-high h-[42px] focus-visible:ring-primary focus-visible:border-primary rounded-lg px-4 py-2.5 text-sm transition-all shadow-none"
                                 id="model-name"
                                 placeholder="e.g. VT-Code-v3"
                                 type="text"
@@ -58,9 +65,7 @@ export default function SubmitSection() {
                                 type="file"
                             />
                             <div className="border-surface-container-highest text-on-surface-variant group-hover:border-primary group-hover:bg-surface-bright flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-all">
-                                <span className="material-symbols-outlined text-secondary mb-2 text-4xl">
-                                    cloud_upload
-                                </span>
+                                <CloudArrowUp className="text-secondary mb-2" size={36} weight="regular" />
                                 <p className="text-sm font-medium">
                                     Click to upload or drag and drop
                                 </p>
@@ -77,20 +82,20 @@ export default function SubmitSection() {
                         >
                             Additional Details (Optional)
                         </label>
-                        <textarea
-                            className="bg-surface-container-lowest border-surface-container-high focus:ring-primary focus:border-primary rounded-lg px-4 py-2.5 text-sm transition-all"
+                        <Textarea
+                            className="bg-surface-container-lowest border-surface-container-high focus-visible:ring-primary focus-visible:border-primary rounded-lg px-4 py-2.5 text-sm transition-all shadow-none resize-none"
                             id="description"
                             placeholder="Briefly describe your model architecture or evaluation setup..."
                             rows={3}
-                        ></textarea>
+                        />
                     </div>
                     <div className="pt-2 text-center">
-                        <button
-                            className="bg-primary text-on-primary hover:bg-primary/90 shadow-primary/20 w-full rounded-md px-10 py-3 font-bold shadow-lg transition-all hover:scale-[1.01] active:scale-95 md:w-auto"
+                        <Button
+                            className="bg-primary text-on-primary hover:bg-primary/90 shadow-primary/20 w-full rounded-md px-10 h-12 text-base font-bold shadow-lg transition-all hover:scale-[1.01] active:scale-95 md:w-auto"
                             type="submit"
                         >
                             Submit
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

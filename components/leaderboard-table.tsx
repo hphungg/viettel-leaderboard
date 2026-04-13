@@ -1,3 +1,4 @@
+import { CaretDown } from "@phosphor-icons/react/dist/ssr"
 import { tableColumns, LeaderboardEntry } from "../data/leaderboard-data"
 
 export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] }) {
@@ -11,17 +12,15 @@ export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] })
                                 <th
                                     key={col.key}
                                     className={`font-label border-gray-200 border-r px-4 py-3 text-xs font-bold tracking-widest uppercase ${col.center ? "text-center" : ""
-                                        } ${col.key === "rank" ? "w-12" : ""} ${col.key === "model" ? "min-w-[160px]" : ""} ${col.highlight
+                                        } ${col.key === "rank" ? "w-12" : ""} ${col.key === "model" ? "min-w-[160px]" : ""} ${(col as any).highlight
                                             ? "min-w-[80px] !border-r-0"
                                             : ""
                                         }`}
                                 >
-                                    {col.highlight ? (
+                                    {(col as any).highlight ? (
                                         <div className="flex items-center justify-center gap-1">
                                             <span>{col.label}</span>
-                                            <span className="material-symbols-outlined text-sm">
-                                                expand_more
-                                            </span>
+                                            <CaretDown size={14} weight="bold" />
                                         </div>
                                     ) : (
                                         col.label
@@ -31,7 +30,7 @@ export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] })
                         </tr>
                     </thead>
                     <tbody className="font-body text-sm">
-                        {Array.from({ length: 12 }).map((_, index) => {
+                        {Array.from({ length: 10 }).map((_, index) => {
                             const entry = data[index]
 
                             if (entry) {
@@ -49,12 +48,9 @@ export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] })
                                             {entry.rank}
                                         </td>
                                         <td
-                                            className={`border-gray-200 border-r px-4 py-2 ${entry.rank <= 5 ? "font-bold" : ""}`}
+                                            className={`border-gray-200 border-r px-4 py-2`}
                                         >
                                             {entry.model}
-                                        </td>
-                                        <td className="border-gray-200 text-secondary border-r px-4 py-2 whitespace-nowrap">
-                                            {entry.provider}
                                         </td>
                                         <td className="border-gray-200 border-r px-4 py-3 text-center">
                                             {entry.benchmarkScore}
@@ -69,7 +65,7 @@ export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] })
                                             {entry.votes}
                                         </td>
                                         <td
-                                            className={`border-gray-200 border-r px-4 py-2 text-center ${entry.rankSpread >= 0
+                                            className={`border-gray-200 px-4 py-2 text-center ${entry.rankSpread >= 0
                                                 ? "text-green-600"
                                                 : "text-red-600"
                                                 }`}
@@ -78,9 +74,6 @@ export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] })
                                                 ? `+${entry.rankSpread}`
                                                 : entry.rankSpread}
                                         </td>
-                                        <td className="bg-primary/5 text-primary px-4 py-2 text-center font-extrabold border-gray-200">
-                                            {entry.avg}
-                                        </td>
                                     </tr>
                                 )
                             }
@@ -88,7 +81,7 @@ export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] })
                             return (
                                 <tr
                                     key={`empty-${index}`}
-                                    className={`border-gray-200 even:bg-surface-container-low/50 border-b h-[#41px] transition-colors ${index === 11
+                                    className={`border-gray-200 even:bg-surface-container-low/50 border-b h-[#41px] transition-colors ${index === 9
                                         ? "!border-b-0"
                                         : ""
                                         }`}
@@ -96,7 +89,7 @@ export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] })
                                     {tableColumns.map((col, colIndex) => (
                                         <td
                                             key={`empty-${index}-${col.key}`}
-                                            className={`border-gray-200 border-r px-4 py-2 ${col.highlight ? "bg-primary/5" : ""} ${colIndex === tableColumns.length - 1 ? "!border-r-0" : ""}`}
+                                            className={`border-gray-200 px-4 py-2 ${(col as any).highlight ? "bg-primary/5" : ""} ${colIndex === tableColumns.length - 1 ? "!border-r-0" : ""}`}
                                         >
                                             &nbsp;
                                         </td>
