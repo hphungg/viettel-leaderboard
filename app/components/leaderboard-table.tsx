@@ -1,6 +1,6 @@
-import { leaderboardData, tableColumns } from "../data/leaderboard-data"
+import { tableColumns, LeaderboardEntry } from "../data/leaderboard-data"
 
-export default function LeaderboardTable() {
+export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] }) {
     return (
         <div className="bg-surface-container-lowest border-gray-200 overflow-hidden flex flex-col min-h-0 rounded-xl border">
             <div className="custom-scrollbar overflow-auto">
@@ -31,8 +31,8 @@ export default function LeaderboardTable() {
                         </tr>
                     </thead>
                     <tbody className="font-body text-sm">
-                        {Array.from({ length: 10 }).map((_, index) => {
-                            const entry = leaderboardData[index]
+                        {Array.from({ length: 12 }).map((_, index) => {
+                            const entry = data[index]
 
                             if (entry) {
                                 return (

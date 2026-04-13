@@ -1,7 +1,4 @@
-import { leaderboardData } from "../data/leaderboard-data"
-
-export default function Pagination() {
-    const totalCount = leaderboardData.length
+export default function Pagination({ totalCount }: { totalCount: number }) {
     const totalPages = Math.max(1, Math.ceil(totalCount / 12))
 
     return (
@@ -11,7 +8,7 @@ export default function Pagination() {
             </span>
             <div className="flex items-center gap-2">
                 <button
-                    className="bg-surface-container-highest text-on-surface hover:bg-primary-container border-gray-200 hover:text-on-primary rounded-full border p-2 transition-all disabled:opacity-50"
+                    className="bg-surface-container-highest h-10 w-10 text-on-surface hover:bg-primary-container border-gray-200 hover:text-on-primary rounded-full border p-2 transition-all disabled:opacity-50"
                     disabled
                 >
                     <span className="material-symbols-outlined">
@@ -31,7 +28,7 @@ export default function Pagination() {
                 ))}
                 {totalPages > 3 && <span className="text-on-surface-variant px-2">...</span>}
                 <button
-                    className="bg-surface-container-highest border-gray-200 text-on-surface hover:bg-primary-container hover:text-on-primary rounded-full border p-2 transition-all disabled:opacity-50"
+                    className="bg-surface-container-highest h-10 w-10 border-gray-200 text-on-surface hover:bg-primary-container hover:text-on-primary rounded-full border p-2 transition-all disabled:opacity-50"
                     disabled={totalPages <= 1}
                 >
                     <span className="material-symbols-outlined">
