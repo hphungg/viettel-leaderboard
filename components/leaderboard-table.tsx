@@ -1,26 +1,51 @@
-import { CaretDown } from "@phosphor-icons/react/dist/ssr"
+import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr"
 import { tableColumns, LeaderboardEntry } from "../data/leaderboard-data"
 
-export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] }) {
+const columnWidthClass: Record<keyof LeaderboardEntry, string> = {
+    rank: "w-16",
+    model: "w-[360px]",
+    benchmarkScore: "w-[140px]",
+    tokens: "w-[160px]",
+    contextWindow: "w-[140px]",
+    votes: "w-[120px]",
+    rankSpread: "w-[120px]",
+}
+
+export default function LeaderboardTable({
+    data,
+    pageSize = 10,
+}: {
+    data: LeaderboardEntry[]
+    pageSize?: number
+}) {
     return (
-        <div className="bg-surface-container-lowest border-gray-200 overflow-hidden flex flex-col min-h-0 rounded-xl border">
+        <div className="bg-surface-container-lowest flex min-h-0 flex-col overflow-hidden rounded-xl border border-gray-200">
             <div className="custom-scrollbar overflow-auto">
-                <table className="w-full table-auto border-collapse text-left">
+                <table className="w-full min-w-275 table-fixed border-collapse text-left">
+                    <colgroup>
+                        {tableColumns.map((col) => (
+                            <col
+                                key={col.key}
+                                className={columnWidthClass[col.key]}
+                            />
+                        ))}
+                    </colgroup>
                     <thead>
-                        <tr className="bg-surface-container-low text-on-surface-variant border-gray-200 border-b">
+                        <tr className="bg-surface-container-low text-on-surface-variant border-b border-gray-200">
                             {tableColumns.map((col) => (
                                 <th
                                     key={col.key}
-                                    className={`font-label border-gray-200 border-r px-4 py-3 text-xs font-bold tracking-widest uppercase ${col.center ? "text-center" : ""
-                                        } ${col.key === "rank" ? "w-12" : ""} ${col.key === "model" ? "min-w-[160px]" : ""} ${(col as any).highlight
-                                            ? "min-w-[80px] !border-r-0"
-                                            : ""
-                                        }`}
+                                    className={`font-label overflow-hidden border-r border-gray-200 px-4 py-3 text-xs font-bold tracking-widest text-ellipsis whitespace-nowrap uppercase ${
+                                        col.center ? "text-center" : ""
+                                    } ${col.highlight ? "border-r-0!" : ""}`}
                                 >
-                                    {(col as any).highlight ? (
+                                    {col.highlight ? (
                                         <div className="flex items-center justify-center gap-1">
                                             <span>{col.label}</span>
-                                            <CaretDown size={14} weight="bold" />
+                                            <CaretDownIcon
+                                                size={14}
+                                                weight="bold"
+                                            />
                                         </div>
                                     ) : (
                                         col.label
@@ -30,45 +55,47 @@ export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] })
                         </tr>
                     </thead>
                     <tbody className="font-body text-sm">
-                        {Array.from({ length: 10 }).map((_, index) => {
+                        {Array.from({ length: pageSize }).map((_, index) => {
                             const entry = data[index]
+                            const isLastRow = index === pageSize - 1
 
                             if (entry) {
                                 return (
                                     <tr
                                         key={entry.rank}
-                                        className={`border-gray-200 hover:bg-surface-bright even:bg-surface-container-low/50 border-b transition-colors ${index === 9
-                                            ? "!border-b-0"
-                                            : ""
-                                            }`}
+                                        className={`hover:bg-surface-bright even:bg-surface-container-low/50 h-12 border-b border-gray-200 transition-colors ${
+                                            isLastRow ? "border-b-0!" : ""
+                                        }`}
                                     >
                                         <td
-                                            className={`border-gray-200 border-r px-4 py-2 text-center font-bold ${entry.rank <= 3 ? "text-primary" : ""}`}
+                                            className={`border-r border-gray-200 px-4 py-2 text-center font-bold ${entry.rank <= 3 ? "text-primary" : ""}`}
                                         >
                                             {entry.rank}
                                         </td>
                                         <td
-                                            className={`border-gray-200 border-r px-4 py-2`}
+                                            className="truncate border-r border-gray-200 px-4 py-2"
+                                            title={entry.model}
                                         >
                                             {entry.model}
                                         </td>
-                                        <td className="border-gray-200 border-r px-4 py-3 text-center">
+                                        <td className="border-r border-gray-200 px-4 py-3 text-center">
                                             {entry.benchmarkScore}
                                         </td>
-                                        <td className="border-gray-200 border-r px-4 py-2 text-center">
+                                        <td className="border-r border-gray-200 px-4 py-2 text-center">
                                             {entry.tokens}
                                         </td>
-                                        <td className="border-gray-200 border-r px-4 py-2 text-center">
+                                        <td className="border-r border-gray-200 px-4 py-2 text-center">
                                             {entry.contextWindow}
                                         </td>
-                                        <td className="border-gray-200 border-r px-4 py-2 text-center">
+                                        <td className="border-r border-gray-200 px-4 py-2 text-center">
                                             {entry.votes}
                                         </td>
                                         <td
-                                            className={`border-gray-200 px-4 py-2 text-center ${entry.rankSpread >= 0
-                                                ? "text-green-600"
-                                                : "text-red-600"
-                                                }`}
+                                            className={`border-gray-200 px-4 py-2 text-center ${
+                                                entry.rankSpread >= 0
+                                                    ? "text-green-600"
+                                                    : "text-red-600"
+                                            }`}
                                         >
                                             {entry.rankSpread >= 0
                                                 ? `+${entry.rankSpread}`
@@ -81,15 +108,14 @@ export default function LeaderboardTable({ data }: { data: LeaderboardEntry[] })
                             return (
                                 <tr
                                     key={`empty-${index}`}
-                                    className={`border-gray-200 even:bg-surface-container-low/50 border-b h-[#41px] transition-colors ${index === 9
-                                        ? "!border-b-0"
-                                        : ""
-                                        }`}
+                                    className={`even:bg-surface-container-low/50 h-12 border-b border-gray-200 transition-colors ${
+                                        isLastRow ? "border-b-0!" : ""
+                                    }`}
                                 >
                                     {tableColumns.map((col, colIndex) => (
                                         <td
                                             key={`empty-${index}-${col.key}`}
-                                            className={`border-gray-200 px-4 py-2 ${(col as any).highlight ? "bg-primary/5" : ""} ${colIndex === tableColumns.length - 1 ? "!border-r-0" : ""}`}
+                                            className={`border-r border-gray-200 px-4 py-2 ${col.highlight ? "bg-primary/5" : ""} ${colIndex === tableColumns.length - 1 ? "border-r-0!" : ""}`}
                                         >
                                             &nbsp;
                                         </td>

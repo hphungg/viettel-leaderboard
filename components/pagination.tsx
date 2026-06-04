@@ -1,42 +1,84 @@
-import { CaretLeft, CaretRight } from "@phosphor-icons/react/dist/ssr"
-import { Button } from "@/components/ui/button"
+import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react/dist/ssr"
+import Link from "next/link"
 
-export default function Pagination({ totalCount }: { totalCount: number }) {
-    const totalPages = Math.max(1, Math.ceil(totalCount / 10))
+const buttonClass =
+    "inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 transition-all"
+const enabledButtonClass =
+    "bg-surface-container-highest text-on-surface hover:bg-primary-container hover:text-on-primary"
+const disabledButtonClass =
+    "pointer-events-none bg-surface-container-highest text-on-surface opacity-50"
+
+function getPageHref(activeTabId: string, page: number) {
+    return `/?tab=${activeTabId}&page=${page}`
+}
+
+export default function Pagination({
+    activeTabId,
+    currentPage,
+    pageSize,
+    totalCount,
+}: {
+    activeTabId: string
+    currentPage: number
+    pageSize: number
+    totalCount: number
+}) {
+    const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
+    const startItem = totalCount === 0 ? 0 : (currentPage - 1) * pageSize + 1
+    const endItem = Math.min(currentPage * pageSize, totalCount)
+    const hasPreviousPage = currentPage > 1
+    const hasNextPage = currentPage < totalPages
 
     return (
-        <div className="mt-2 flex-shrink-0 flex items-center justify-between">
+        <div className="mt-2 flex shrink-0 items-center justify-between">
             <span className="text-on-surface-variant text-base font-medium">
-                Showing 1 to {totalCount} of {totalCount} models
+                Showing {startItem} to {endItem} of {totalCount} models
             </span>
             <div className="flex items-center gap-2">
-                <Button
-                    variant="outline"
-                    className="h-10 w-10 rounded-full border-gray-200 bg-surface-container-highest p-0 text-on-surface hover:bg-primary-container hover:text-on-primary transition-all disabled:opacity-50"
-                    disabled
+                <Link
+                    aria-disabled={!hasPreviousPage}
+                    aria-label="Previous page"
+                    className={`${buttonClass} ${
+                        hasPreviousPage
+                            ? enabledButtonClass
+                            : disabledButtonClass
+                    }`}
+                    href={getPageHref(
+                        activeTabId,
+                        hasPreviousPage ? currentPage - 1 : currentPage,
+                    )}
                 >
-                    <CaretLeft size={20} />
-                </Button>
+                    <CaretLeftIcon size={20} />
+                </Link>
                 {Array.from({ length: totalPages }).map((_, i) => (
-                    <Button
+                    <Link
                         key={i}
-                        variant="outline"
-                        className={`h-10 w-10 rounded-full transition-all ${i === 0
-                            ? "bg-primary-container text-on-primary font-bold hover:bg-primary-container/90"
-                            : "bg-surface-container-highest text-on-surface hover:bg-primary-container hover:text-on-primary font-medium"
-                            }`}
+                        aria-current={
+                            i + 1 === currentPage ? "page" : undefined
+                        }
+                        className={`${buttonClass} ${
+                            i + 1 === currentPage
+                                ? "bg-primary-container text-on-primary hover:bg-primary-container/90 font-bold"
+                                : "bg-surface-container-highest text-on-surface hover:bg-primary-container hover:text-on-primary font-medium"
+                        }`}
+                        href={getPageHref(activeTabId, i + 1)}
                     >
                         {i + 1}
-                    </Button>
+                    </Link>
                 ))}
-                {totalPages > 3 && <span className="text-on-surface-variant px-2">...</span>}
-                <Button
-                    variant="outline"
-                    className="h-10 w-10 rounded-full border-gray-200 bg-surface-container-highest p-0 text-on-surface hover:bg-primary-container hover:text-on-primary transition-all disabled:opacity-50"
-                    disabled={totalPages <= 1}
+                <Link
+                    aria-disabled={!hasNextPage}
+                    aria-label="Next page"
+                    className={`${buttonClass} ${
+                        hasNextPage ? enabledButtonClass : disabledButtonClass
+                    }`}
+                    href={getPageHref(
+                        activeTabId,
+                        hasNextPage ? currentPage + 1 : currentPage,
+                    )}
                 >
-                    <CaretRight size={20} />
-                </Button>
+                    <CaretRightIcon size={20} />
+                </Link>
             </div>
         </div>
     )
